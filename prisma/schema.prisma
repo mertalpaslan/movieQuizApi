@@ -1,0 +1,101 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+
+  email     String     @unique
+  password  String
+  shows     Show[]
+  quizzes   Quiz[]
+  questions Question[]
+}
+
+model Show {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+
+  title String  @db.VarChar(255)
+  info  String?
+  year  Int?
+
+  creatorId Int
+  creator   User   @relation(fields: [creatorId], references: [id])
+  quizzes   Quiz[]
+}
+
+enum QUIZ_STATUSES {
+  DRAFT
+  INACTIVE
+  ACTIVE
+}
+
+model Quiz {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+
+  title  String        @db.VarChar(255)
+  info   String?
+  Status QUIZ_STATUSES @default(DRAFT)
+
+  creatorId Int
+  creator   User       @relation(fields: [creatorId], references: [id])
+  Show      Show?      @relation(fields: [showId], references: [id])
+  showId    Int?
+  questions Question[]
+
+  @@index([showId])
+  @@index([creatorId])
+}
+
+enum QUESTION_STATUSES {
+  DRAFT
+  INACTIVE
+  ACTIVE
+}
+
+model Question {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+
+  body   String
+  status QUESTION_STATUSES @default(DRAFT)
+
+  creatorId Int
+  creator   User     @relation(fields: [creatorId], references: [id])
+  quizId    Int
+  quiz      Quiz     @relation(fields: [quizId], references: [id])
+  answers   Answer[]
+
+  @@index([quizId])
+  @@index([creatorId])
+}
+
+model Answer {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+
+  body      String
+  isCorrect Boolean           @default(false)
+  status    QUESTION_STATUSES @default(DRAFT)
+
+  questionId Int
+  question   Question @relation(fields: [questionId], references: [id])
+
+  @@index([questionId])
+}
