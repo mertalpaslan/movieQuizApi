@@ -17,3 +17,20 @@ export const createJWT = (user) => {
 
   return token
 }
+
+export const protect = (req, res, next) => {
+  const [_, token] = req.headers.authorization.split(' ')
+  if (!token) {
+    res.status(401)
+    res.send('Not authorized')
+  } else {
+    try {
+      const user = jwt.verify(token, process.env.JWT_SECRET)
+      req.user = user
+      next()
+    } catch (e) {
+      res.status(401)
+      res.json({ message: 'Invalid Token!' })
+    }
+  }
+}

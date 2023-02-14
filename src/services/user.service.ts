@@ -19,7 +19,7 @@ export const verify = async (data) => {
     },
   })
 
-  if (user && comparePasswords(data.password, user.password)) {
+  if (user && (await comparePasswords(data.password, user.password))) {
     return user
   } else {
     return false
