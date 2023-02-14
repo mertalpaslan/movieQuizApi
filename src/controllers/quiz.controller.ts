@@ -1,23 +1,37 @@
 import * as quizService from '../services/quiz.service'
 
-const index = (req, res) => {
-  res.send(quizService.getAll())
+const index = async (req, res) => {
+  const quizzes = await quizService.getAllByUser(req.user.id)
+
+  res.json({ data: quizzes })
 }
 
-const show = (req, res) => {
-  res.send(quizService.get(req.params.id))
+const show = async (req, res) => {
+  const quiz = await quizService.getQuestions(Number(req.params.id))
+
+  res.json({ data: quiz })
 }
 
-const create = (req, res) => {
-  res.send(quizService.create(req.body))
+const create = async (req, res) => {
+  const quiz = await quizService.create(req.user.id, req.body)
+
+  res.json({ data: quiz })
 }
 
-const update = (req, res) => {
-  res.send(quizService.update(req.params.id, req.body))
+const update = async (req, res) => {
+  const quiz = await quizService.update(
+    req.user.id,
+    Number(req.params.id),
+    req.body,
+  )
+
+  res.json({ data: quiz })
 }
 
-const destroy = (req, res) => {
-  res.send(quizService.destroy(req.params.id))
+const destroy = async (req, res) => {
+  const quiz = await quizService.destroy(Number(req.params.id))
+
+  res.json({ data: quiz })
 }
 
 export { index, show, create, update, destroy }
