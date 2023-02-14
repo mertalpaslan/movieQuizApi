@@ -1,15 +1,15 @@
 import { body, param } from 'express-validator'
 import { handleInputErrors } from './error'
 
-const titleValidator = body('title').isString().isLength({ min: 4, max: 255 })
-const showIdValidator = body('showId').isInt().toInt()
+const bodyValidator = body('body').isString().isLength({ min: 20 })
+const quizIdValidator = body('quizId').isInt().toInt()
 const idParamValidator = param('id').isInt().toInt()
 
-const create = [titleValidator, showIdValidator, handleInputErrors]
+const create = [bodyValidator, quizIdValidator, handleInputErrors]
 
 const update = [
-  titleValidator,
-  showIdValidator,
+  bodyValidator,
+  quizIdValidator,
   idParamValidator,
   handleInputErrors,
 ]

@@ -7,7 +7,7 @@ const index = async (req, res) => {
 }
 
 const show = async (req, res) => {
-  const quiz = await quizService.getQuestions(Number(req.params.id))
+  const quiz = await quizService.getQuestions(req.params.id)
 
   res.json({ data: quiz })
 }
@@ -29,7 +29,7 @@ const update = async (req, res) => {
 }
 
 const destroy = async (req, res) => {
-  const quiz = await quizService.destroy(Number(req.params.id))
+  const quiz = await quizService.destroy(req.params.id)
 
   res.json({ data: quiz })
 }

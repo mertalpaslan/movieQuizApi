@@ -1,48 +1,44 @@
 import { prisma } from '../db'
 
 const getAllByUser = async (userId) => {
-  const quizzes = await prisma.quiz.findMany({
+  const questions = await prisma.question.findMany({
     where: {
       creatorId: userId,
     },
   })
 
-  return quizzes
+  return questions
 }
 
-const getQuestions = async (id) => {
-  const quiz = await prisma.quiz.findUnique({
+const getAnswers = async (id) => {
+  const question = await prisma.question.findUnique({
     where: {
       id: id,
     },
     include: {
-      questions: true,
+      answers: true,
     },
   })
 
-  return quiz
+  return question
 }
 const create = async (user_id, data) => {
-  console.log('data', data)
-  console.log(typeof data.showId)
-  console.log(data.showId)
-
-  const quiz = await prisma.quiz.create({
+  const question = await prisma.question.create({
     data: { creatorId: user_id, ...data },
   })
 
-  return quiz
+  return question
 }
 
 const update = async (user_id, id, data) => {
-  const quiz = await prisma.quiz.update({
+  const question = await prisma.question.update({
     where: {
       id: id,
     },
     data: { creatorId: user_id, ...data },
   })
 
-  return quiz
+  return question
 }
 
 const destroy = async (id) => {
@@ -55,4 +51,4 @@ const destroy = async (id) => {
   return quiz
 }
 
-export { getAllByUser, getQuestions, create, update, destroy }
+export { getAllByUser, getAnswers, create, update, destroy }
