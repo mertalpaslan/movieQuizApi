@@ -23,8 +23,17 @@ const getAnswers = async (id) => {
   return question
 }
 const create = async (user_id, data) => {
+  const { answers, ...quizFields } = data
+
   const question = await prisma.question.create({
-    data: { creatorId: user_id, ...data },
+    data: {
+      creatorId: user_id,
+      ...quizFields,
+      answers: {
+        create: answers,
+      },
+    },
+    include: { answers: true },
   })
 
   return question
@@ -35,7 +44,7 @@ const update = async (user_id, id, data) => {
     where: {
       id: id,
     },
-    data: { creatorId: user_id, ...data },
+    data: { creatorId: user_id, ...data, answers: {} },
   })
 
   return question

@@ -10,23 +10,24 @@ const getAllByUser = async (userId) => {
   return quizzes
 }
 
-const getQuestions = async (id) => {
+const getQuestionsByPage = async (id, page = 1, limit = 5) => {
+  const skip = (page - 1) * limit
+
   const quiz = await prisma.quiz.findUnique({
     where: {
       id: id,
     },
     include: {
-      questions: true,
+      questions: {
+        skip: skip,
+        take: limit,
+      },
     },
   })
 
   return quiz
 }
 const create = async (user_id, data) => {
-  console.log('data', data)
-  console.log(typeof data.showId)
-  console.log(data.showId)
-
   const quiz = await prisma.quiz.create({
     data: { creatorId: user_id, ...data },
   })
@@ -55,4 +56,4 @@ const destroy = async (id) => {
   return quiz
 }
 
-export { getAllByUser, getQuestions, create, update, destroy }
+export { getAllByUser, getQuestionsByPage, create, update, destroy }

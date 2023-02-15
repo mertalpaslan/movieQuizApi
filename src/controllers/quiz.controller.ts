@@ -7,7 +7,11 @@ const index = async (req, res) => {
 }
 
 const show = async (req, res) => {
-  const quiz = await quizService.getQuestions(req.params.id)
+  const quiz = await quizService.getQuestionsByPage(
+    req.params.id,
+    req.query.page,
+    req.query.limit,
+  )
 
   res.json({ data: quiz })
 }
