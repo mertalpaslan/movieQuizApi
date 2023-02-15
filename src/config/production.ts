@@ -1,3 +1,1 @@
-export default {
-  port: process.env.port,
-}
+export default {}
