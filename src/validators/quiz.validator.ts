@@ -3,8 +3,11 @@ import { handleInputErrors } from './error'
 
 const titleValidator = body('title').isString().isLength({ min: 4, max: 255 })
 const showIdValidator = body('showId').isInt().toInt()
-const pageQueryValidator = query('page').isInt({ min: 1 }).toInt()
-const limitQueryValidator = query('limit').isInt({ min: 1, max: 20 }).toInt()
+const pageQueryValidator = query('page').isInt({ min: 1 }).toInt().optional()
+const limitQueryValidator = query('limit')
+  .isInt({ min: 1, max: 20 })
+  .toInt()
+  .optional()
 const idParamValidator = param('id').isInt().toInt()
 
 const create = [titleValidator, showIdValidator, handleInputErrors]

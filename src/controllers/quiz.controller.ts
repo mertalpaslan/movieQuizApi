@@ -6,14 +6,15 @@ const index = async (req, res) => {
   res.json({ data: quizzes })
 }
 
-const show = async (req, res) => {
-  const quiz = await quizService.getQuestionsByPage(
-    req.params.id,
-    req.query.page,
-    req.query.limit,
-  )
-
-  res.json({ data: quiz })
+const show = (req, res) => {
+  quizService
+    .getQuestionsByPage(req.params.id, req.query.page, req.query.limit)
+    .then((quiz) => {
+      res.json({ data: quiz })
+    })
+    .catch((e) => {
+      res.status(401).json({ error: e })
+    })
 }
 
 const create = async (req, res) => {
@@ -32,10 +33,11 @@ const update = async (req, res) => {
   res.json({ data: quiz })
 }
 
-const destroy = async (req, res) => {
-  const quiz = await quizService.destroy(req.params.id)
-
-  res.json({ data: quiz })
+const destroy = (req, res) => {
+  quizService
+    .destroy(req.params.id)
+    .then((quiz) => res.json(quiz))
+    .catch((e) => res.status(401).json({ error: e }))
 }
 
 export { index, show, create, update, destroy }

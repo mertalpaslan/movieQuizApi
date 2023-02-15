@@ -21,6 +21,9 @@ const getQuestionsByPage = async (id, page = 1, limit = 5) => {
       questions: {
         skip: skip,
         take: limit,
+        include: {
+          answers: true,
+        },
       },
     },
   })
