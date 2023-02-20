@@ -2,6 +2,7 @@ import express from 'express'
 import { router } from './router'
 import morgan from 'morgan'
 import { protect } from './modules/auth'
+import errorHandler from './middlewares/errorHandler'
 import * as authController from './controllers/auth.controller'
 import * as authValidator from './validators/auth.validator'
 
@@ -13,4 +14,6 @@ app.use(express.urlencoded({ extended: true }))
 app.post('/register', authValidator.register, authController.register)
 app.post('/login', authValidator.login, authController.login)
 
-app.use('/api', protect, router)
+app.use('/api', authValidator.token, protect, router)
+
+app.use(errorHandler)

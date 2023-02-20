@@ -1,19 +1,17 @@
 import { prisma } from '../db'
 
-const getAllByUser = async (userId) => {
-  const quizzes = await prisma.quiz.findMany({
+const getAllByUser = (userId) => {
+  return prisma.quiz.findMany({
     where: {
       creatorId: userId,
     },
   })
-
-  return quizzes
 }
 
-const getQuestionsByPage = async (id, page = 1, limit = 5) => {
+const getQuestionsByPage = (id, page = 1, limit = 5) => {
   const skip = (page - 1) * limit
 
-  const quiz = await prisma.quiz.findUnique({
+  return prisma.quiz.findUnique({
     where: {
       id: id,
     },
@@ -27,36 +25,28 @@ const getQuestionsByPage = async (id, page = 1, limit = 5) => {
       },
     },
   })
-
-  return quiz
 }
-const create = async (user_id, data) => {
-  const quiz = await prisma.quiz.create({
+const create = (user_id, data) => {
+  return prisma.quiz.create({
     data: { creatorId: user_id, ...data },
   })
-
-  return quiz
 }
 
-const update = async (user_id, id, data) => {
-  const quiz = await prisma.quiz.update({
+const update = (user_id, id, data) => {
+  return prisma.quiz.update({
     where: {
       id: id,
     },
     data: { creatorId: user_id, ...data },
   })
-
-  return quiz
 }
 
-const destroy = async (id) => {
-  const quiz = await prisma.quiz.delete({
+const destroy = (id) => {
+  return prisma.quiz.delete({
     where: {
       id: id,
     },
   })
-
-  return quiz
 }
 
 export { getAllByUser, getQuestionsByPage, create, update, destroy }

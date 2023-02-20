@@ -1,17 +1,15 @@
 import { prisma } from '../db'
 
-const getAllByUser = async (userId) => {
-  const questions = await prisma.question.findMany({
+const getAllByUser = (userId) => {
+  return prisma.question.findMany({
     where: {
       creatorId: userId,
     },
   })
-
-  return questions
 }
 
-const getAnswers = async (id) => {
-  const question = await prisma.question.findUnique({
+const getAnswers = (id) => {
+  return prisma.question.findUnique({
     where: {
       id: id,
     },
@@ -19,13 +17,11 @@ const getAnswers = async (id) => {
       answers: true,
     },
   })
-
-  return question
 }
-const create = async (user_id, data) => {
+const create = (user_id, data) => {
   const { answers, ...quizFields } = data
 
-  const question = await prisma.question.create({
+  return prisma.question.create({
     data: {
       creatorId: user_id,
       ...quizFields,
@@ -35,29 +31,23 @@ const create = async (user_id, data) => {
     },
     include: { answers: true },
   })
-
-  return question
 }
 
-const update = async (user_id, id, data) => {
-  const question = await prisma.question.update({
+const update = (user_id, id, data) => {
+  return prisma.question.update({
     where: {
       id: id,
     },
     data: { creatorId: user_id, ...data, answers: {} },
   })
-
-  return question
 }
 
-const destroy = async (id) => {
-  const quiz = await prisma.quiz.delete({
+const destroy = (id) => {
+  return prisma.quiz.delete({
     where: {
       id: id,
     },
   })
-
-  return quiz
 }
 
 export { getAllByUser, getAnswers, create, update, destroy }

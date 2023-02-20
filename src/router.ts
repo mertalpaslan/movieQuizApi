@@ -21,7 +21,6 @@ router.post('/quiz', quizValidator.create, quizController.create)
 router.put('/quiz/:id', quizValidator.update, quizController.update)
 router.delete('/quiz/:id', quizValidator.destroy, quizController.destroy)
 
-router.get('/questions', questionController.index)
 router.get('/question/:id', questionValidator.show, questionController.show)
 router.post('/question', questionValidator.create, questionController.create)
 router.put('/question/:id', questionValidator.update, questionController.update)
